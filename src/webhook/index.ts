@@ -37,8 +37,6 @@ export const webhookHandler = async (req: Request, res: Response) => {
       }
     }
     res.send({ received: true });
-
-    res.send({ received: true });
   } catch (error) {
     console.log("error in webhookHandler", error);
     throw error;
