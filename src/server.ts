@@ -6,6 +6,7 @@ import connectToDatabase from "./db";
 import productRoutes from "./routes/product";
 import orderRoutes from "./routes/order";
 import { webhookHandler } from "./webhook";
+import userRoutes from "./routes/user";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/ping", (req, res) => {
 app.post("/webhook", express.raw({ type: "application/json" }), webhookHandler);
 
 app.use(express.json());
+app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
 

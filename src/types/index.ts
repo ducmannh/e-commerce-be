@@ -38,3 +38,12 @@ export interface IOrder {
   updatedAt: string;
   paymentStatus: string;
 }
+
+export interface IUserAdmin {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phone: number;
+}

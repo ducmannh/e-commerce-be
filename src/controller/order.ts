@@ -19,8 +19,8 @@ const getTotalAmount = (orderItems: IOrderItem[]) => {
 };
 
 export const stripeClient = new stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2022-11-15",
-  });
+  apiVersion: "2022-11-15",
+});
 
 /**
  *
@@ -59,6 +59,53 @@ export const createOrder = async (req: Request, res: Response) => {
     console.log("error creating order", error);
     res.send({
       message: "Something went wrong in create order",
+    });
+    throw error;
+  }
+};
+
+export const getOrder = async (req: Request, res: Response) => {
+  try {
+    const order = await Order.find({});
+    res.send(order);
+  } catch (error) {
+    console.log("error get order", error);
+    res.send({
+      message: "Something went wrong in get order",
+    });
+    throw error;
+  }
+};
+
+export const deleteOrderById = async (req: Request, res: Response) => {
+  try {
+    const orderDeleteId = await Order.deleteOne({ _id: req.params.id });
+    if (orderDeleteId.deletedCount === 1) {
+      const remainingOrder = await Order.find({});
+      return res.send(remainingOrder);
+    }
+  } catch (error) {
+    console.log("error delete order", error);
+    res.send({
+      message: "Something went wrong in delete order",
+    });
+    throw error;
+  }
+};
+
+export const deleteManyOrder = async (req: Request, res: Response) => {
+  try {
+    const { ids } = req.body;
+    const orderIds = await Order.deleteMany({ _id: { $in: ids } });
+
+    if (orderIds.deletedCount > 0) {
+      const remainingOrder = await Order.find({});
+      return res.send(remainingOrder);
+    }
+  } catch (error) {
+    console.log("error deleteManyOrder", error);
+    res.send({
+      message: "Something went wrong in deleteManyOrder",
     });
     throw error;
   }
